@@ -7,6 +7,7 @@ use noir_rs::{
     native_types::{Witness, WitnessMap},
     barretenberg::{
         prove::prove_ultra_honk,
+        prove::prove_ultra_plonk,
         verify::verify_ultra_honk,
         srs::setup_srs,
     },
@@ -192,10 +193,10 @@ pub extern "system" fn Java_com_noirandroid_lib_Noir_00024Companion_prove<'local
         );
     }
 
-    let (proof, vk) = if proof_type == "honk" { 
-        prove_ultra_honk(&circuit_bytecode, witness_map, recursive_bool).expect("Proof generation failed") 
-    } else { 
-        panic!("Honk is the only proof type supported for now");
+    let (proof, vk) = match proof_type.as_str() {
+        "honk" => prove_ultra_honk(&circuit_bytecode, witness_map, recursive_bool).expect("Proof generation failed"),
+        "plonk" => prove_ultra_plonk(&circuit_bytecode, witness_map, recursive_bool).expect("Proof generation failed"),
+        _ => panic!("honk and plonk are the only proof types supported for now")
     };
 
     let proof_str = hex::encode(proof);
@@ -216,8 +217,8 @@ pub extern "system" fn Java_com_noirandroid_lib_Noir_00024Companion_prove<'local
         "(Ljava/lang/String;Ljava/lang/String;)V",
         &[(&proof_jstr).into(), (&vk_jstr).into()],
     )
-    .expect("Failed to create new Proof object")
-    .as_raw()
+        .expect("Failed to create new Proof object")
+        .as_raw()
 }
 
 #[no_mangle]
@@ -225,7 +226,7 @@ pub extern "system" fn Java_com_noirandroid_lib_Noir_00024Companion_verify<'loca
     mut env: JNIEnv<'local>,
     _class: JClass<'local>,
     mut proof_jobject: JObject<'local>,
-    proof_type_jstr: JString<'local>
+    proof_type_jstr: JString<'local>,
 ) -> jboolean {
     let proof_field = env
         .get_field(&mut proof_jobject, "proof", "Ljava/lang/String;")
@@ -264,11 +265,12 @@ pub extern "system" fn Java_com_noirandroid_lib_Noir_00024Companion_verify<'loca
         .expect("Failed to convert proof type to Rust string")
         .to_owned();
 
-    let verdict = if proof_type == "honk" {
-        verify_ultra_honk(proof, verification_key).expect("Verification failed")
-    } else {
-        panic!("Ultra honk is the only proof type supported for now");
+    let verdict = match proof_type.as_str() {
+        "honk" => verify_ultra_honk(proof, verification_key).expect("Verification failed"),
+        //"plonk" => verify_ultra_plonk(proof, ).expect("Verification failed"),
+        _ => panic!("honk are the only proof types supported for now")
     };
+
 
     jboolean::from(verdict)
 }

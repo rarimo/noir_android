@@ -90,7 +90,7 @@ class Circuit(public val bytecode: String, public val manifest: CircuitManifest,
             throw IllegalArgumentException("SRS not set up")
         }
         val witness = generateWitnessMap(initialWitness, manifest.abi.parameters, 0)
-        return Noir.prove(bytecode, witness, proofType ?: "honk", if (recursive ?: false) "1" else "0")
+        return Noir.prove(bytecode, witness, proofType ?: "honk", if (recursive == true) "1" else "0")
     }
 
     fun verify(proof: Proof, proofType: String?): Boolean {
