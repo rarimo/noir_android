@@ -1,5 +1,3 @@
-use std::alloc::System;
-
 use jni::objects::{JClass, JObject, JString};
 use jni::sys::{jboolean, jobject, jint, JNI_TRUE};
 use jni::JNIEnv;
