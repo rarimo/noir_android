@@ -1,4 +1,4 @@
-export ANDROID_HOME=***
+export ANDROID_HOME=.........AndroidSDK
 export NDK_VERSION=26.3.11579264
 export HOST_TAG=linux-x86_64
 
@@ -18,8 +18,7 @@ export PATH="$PATH:$TOOLCHAIN/bin"
 export CMAKE_TOOLCHAIN_FILE_aarch64_linux_android="$ANDROID_NDK_HOME/build/cmake/android.toolchain.cmake"
 
 export CARGO_TARGET_AARCH64_LINUX_ANDROID_LINKER="$ANDROID_NDK_HOME/toolchains/llvm/prebuilt/linux-x86_64/bin/aarch64-linux-android33-clang"
-export RUSTFLAGS="-C link-arg=-fuse-ld=lld"
-
+export RUSTFLAGS="-C link-arg=-fuse-ld=lld -C link-arg=-lc++_shared"
 export ANDROID_ABI=arm64-v8a
 
 
