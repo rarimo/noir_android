@@ -1,4 +1,4 @@
-export ANDROID_HOME=.........AndroidSDK
+export ANDROID_HOME=***
 export NDK_VERSION=26.3.11579264
 export HOST_TAG=linux-x86_64
 

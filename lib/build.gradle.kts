@@ -114,7 +114,7 @@ tasks.register<Copy>("copyRustLibs") {
     } else {
         // Download the .so file from the GitHub release
         download.run {
-            src("https://github.com/madztheo/noir_android/releases/download/v1.0.0-beta.3-2/libnoir_java_arm64-v8a.so")
+            src("https://github.com/rarimo/noir_android/releases/download/v1.0.0-beta.1/libnoir_java.so")
             dest("src/main/jniLibs/arm64-v8a/libnoir_java.so")
             overwrite(false)
         }
